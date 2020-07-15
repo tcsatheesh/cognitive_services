@@ -1,0 +1,49 @@
+# Default values for labeltool.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: mcr.microsoft.com/azure-cognitive-services/custom-form/labeltool
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecrets: cogsvc-acr-secret
+
+ports:
+  containerPort: 80
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  path: "/(.*)"
+  host: labeltool.cogsvcs.local
+  tls: 
+    - secretName: labeltool-ingress-tls
+      hosts:
+        - labeltool.cogsvcs.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

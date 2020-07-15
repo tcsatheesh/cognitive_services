@@ -12,3 +12,17 @@ helm install \
 helm install \
     --set cognitive_service_api_key=$COGNITIVE_SERVICE_API_KEY \
     cvread cvread -n $COGNITIVE_SERVICE_NAMESPACE
+
+openssl req -x509 -nodes -days 730 -newkey rsa:2048 \
+    -keyout labeltool-ingress-tls.key \
+    -out labeltool-ingress-tls.crt \
+    -config req.cnf
+
+kubectl create secret tls labeltool-ingress-tls \
+-n $COGNITIVE_SERVICE_NAMESPACE \
+--key labeltool-ingress-tls.key \
+--cert labeltool-ingress-tls.crt
+
+
+helm upgrade --install \
+    labeltool labeltool -n $COGNITIVE_SERVICE_NAMESPACE

@@ -28,8 +28,8 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/configuration-snippet: |2
              sub_filter '"url":"/swagger/v2/swagger.json"' '"url":"/cvread/swagger/v2/swagger.json"';
+             sub_filter 'href="/swagger">' 'href="/cvread/swagger">';
              sub_filter_once on;
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
     - host: localhost
